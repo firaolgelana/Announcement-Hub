@@ -1,4 +1,4 @@
-#Announcement Portal - Job Posting Web Application
+# Announcement Portal - Job Posting Web Application
 
 Project Overview:
 A lightweight Java Servlet and JDBC-based web application that connects job posters with applicants. Employers can view applicants for specific job posts through a REST-like API, while job seekers can submit their profiles. Designed for simplicity and learning purposes using core Java technologies.
