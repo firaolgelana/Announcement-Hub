@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Job Seekers - Announcement Portal</title>
+    <link rel="stylesheet" href="css/jobApplicants.css">
+    <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"> -->
+</head>
+<body>
+    <header>
+        <h1>Job Seekers for Post</h1>
+        <nav>
+            <ul>
+                <li><a href="instituteDashboard.html">Dashboard</a></li>
+                <li><a href="jobApplicants.html">See All Applicants</a></li>
+                <li><a href="#">Profile</a></li>
+                <li><a href="/advanced_project/logout">Logout</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section class="applicant-list">
+            <h2>Applicants for Job Post</h2>
+            <div id="applicants"></div>
+        </section>
+    </main>
+
+    <script>
+document.addEventListener("DOMContentLoaded", function () {
+    const applicantsDiv = document.getElementById('applicants');
+    applicantsDiv.innerHTML = '<p>Loading applicants...</p>'; // Show loading state
+
+    fetch('/advanced_project/getEmail')
+        .then(response => {
+            if (!response.ok) throw new Error('Failed to fetch email');
+            return response.json();
+        })
+        .then(data => {
+            const userEmail = data.email;
+            if (userEmail) {
+                return fetch('/advanced_project/getPostIdByEmail', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ userEmail: userEmail })
+                });
+            } else {
+                throw new Error('No user email found.');
+            }
+        })
+        .then(response => {
+            
+            if (!response.ok) throw new Error('Failed to fetch Post ID');
+            return response.json();
+        })
+        .then(data => {
+            const postId = data.postId;
+            if (postId) {
+                return fetch('/advanced_project/getApplicantsByPostId', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ postId: postId })
+                });
+            } else {
+                throw new Error('No post ID found.');
+            }
+        })
+        .then(response => {
+
+            if (!response.ok) throw new Error('Failed to fetch applicants');
+            return response.json();
+        })
+        .then(applicants => {
+            // Clear existing content
+            applicantsDiv.innerHTML = ''; 
+
+            if (applicants.length === 0) {
+                applicantsDiv.innerHTML = '<p>No applicants found for this post.</p>';
+            } else {
+                applicants.forEach(applicant => {
+                    applicantsDiv.innerHTML += `
+                        <div class="applicant card mb-3 p-3">
+                            <h4>${applicant.fullName}</h4>
+                            <p>Email: ${applicant.email}</p>
+                            <p>GitHub: <a href="${applicant.github}" target="_blank">${applicant.github}</a></p>
+                            <p>LinkedIn: <a href="${applicant.linkedin}" target="_blank">${applicant.linkedin}</a></p>
+                        </div>
+                    `;
+                });
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            applicantsDiv.innerHTML = `<p class="text-danger">Error: ${error.message}</p>`;
+        });
+});
+
+    </script>
+</body>
+</html>

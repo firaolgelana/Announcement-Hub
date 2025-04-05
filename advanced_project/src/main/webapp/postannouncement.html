@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Post Job</title>
+    <link rel="stylesheet" href="css/postAnnouncement.css" />
+  </head>
+  <body>
+    <header>
+      <h1>Post a New Job</h1>
+      <nav>
+        <ul>
+          <li><a href="instituteDashboard.html">Dashboard</a></li>
+          <li><a href="postannouncement.html">Post Job</a></li>
+          <li><a href="#">Profile</a></li>
+          <li><a href="/advanced_project/logout">Logout</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <main>
+      <section class="announcement-form">
+        <h2>Fill out the details of your Job</h2>
+        <form id="announcementForm">
+          <label for="title">Title:</label>
+          <input type="text" id="title" name="title" required />
+
+          <label for="description">Description:</label>
+          <textarea
+            id="description"
+            name="description"
+            rows="5"
+            required
+          ></textarea>
+
+          <label for="date">Date:</label>
+          <input type="date" id="date" name="date" required />
+
+          <button type="submit">Post Job</button>
+        </form>
+      </section>
+    </main>
+
+    <footer>
+      <p>&copy; 2024 FreelanceHub - All Rights Reserved</p>
+    </footer>
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JS for form handling -->
+    <script>
+      document
+        .getElementById("announcementForm")
+        .addEventListener("submit", function (event) {
+          event.preventDefault(); // Prevent the default form submission
+
+          const title = document.getElementById("title").value;
+          const description = document.getElementById("description").value;
+          const date = document.getElementById("date").value;
+
+          fetch("/advanced_project/postAnnouncement", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/x-www-form-urlencoded",
+            },
+            body: new URLSearchParams({
+              title: title,
+              description: description,
+              date: date,
+            }),
+          })
+            .then((response) => response.text())
+            .then((data) => {
+              if (data.includes("success")) {
+                alert("Announcement posted successfully.");
+              } else {
+                alert("Failed to post the announcement. Please try again.");
+              }
+            })
+            .catch((error) => {
+              console.error("Error:", error);
+              alert("Internal server error. Please try again.");
+            });
+        });
+    </script>
+  </body>
+</html>

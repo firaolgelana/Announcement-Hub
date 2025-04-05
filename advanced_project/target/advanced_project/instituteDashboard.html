@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard - FreelanceHub</title>
+    <link rel="stylesheet" href="css/end.css" />
+    <script src="js/dashboard.js" defer></script>
+  </head>
+  <body>
+    <header>
+      <h1>Welcome to Freelance<span class="accent">Hub</span> Dashboard</h1>
+      <nav>
+        <ul>
+          <li><a href="homePage.html">Home</a></li>
+          <li><a href="instituteDashboard.html">Dashboard</a></li>
+          <li><a href="#">Profile</a></li>
+          <li><a href="/advanced_project/logout">Logout</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <main>
+        <section class="my-announcements">
+            <h2>My Announcements</h2>
+            <button id="viewInstituteBtn">View Announcements</button>
+        </section>    
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+            document.getElementById("viewInstituteBtn").addEventListener("click", function() {
+                window.location.href = "viewAnnouncments.html";
+            });
+        });
+        </script>    
+
+        <section class="applicants-info">
+            <h2>Applicants Informations</h2>
+            <button id="viewApplicantsBtn">View All Applicants</button>
+        </section>
+        
+        <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            document.getElementById("viewApplicantsBtn").addEventListener("click", function() {
+                window.location.href = "jobApplicants.html";
+            });
+        });
+        </script>
+        
+        <section class="post-announcement">
+            <h2>Post Announcements</h2>
+            <button onclick="postAnnouncements()">post announcements</button>
+        </section>
+    </main>
+
+    <footer>
+      <p>&copy; 2024 FreelanceHub - All Rights Reserved</p>
+    </footer>
+  </body>
+</html>

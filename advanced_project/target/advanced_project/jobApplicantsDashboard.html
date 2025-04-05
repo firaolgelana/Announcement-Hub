@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard - FreelanceHub</title>
+    <link rel="stylesheet" href="css/end.css" />
+    <script src="js/dashboard.js" defer></script>
+  </head>
+  <body>
+    <header>
+      <h1>Welcome to Freelance<span class="accent">Hub</span> Dashboard</h1>
+      <nav>
+        <ul>
+          <li><a href="homePage.html">Home</a></li>
+          <li><a href="jobApplicantsDashboard.html">Dashboard</a></li>
+          <li><a href="#">Profile</a></li>
+          <li><a href="/advanced_project/logout">Logout</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <main>
+        <section class="all-announcements">
+            <h2>All Job Posts</h2>
+            <button onclick="allAnnouncements()">View all Posts</button>
+        </section>        
+        
+        <section class="recent-announcements">
+            <h2>Recent Jobs</h2>
+            <button onclick="allAnnouncements()">View recent posts</button>
+        </section>
+
+    </main>
+
+    <footer>
+      <p>&copy; 2024 FreelanceHub - All Rights Reserved</p>
+    </footer>
+  </body>
+</html>

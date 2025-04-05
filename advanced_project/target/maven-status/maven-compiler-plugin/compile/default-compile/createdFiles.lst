@@ -1,0 +1,13 @@
+com\project\db\InitializeConnection.class
+com\project\servlet\LoginServlet.class
+com\project\servlet\ApplyServlet.class
+com\project\servlet\LogoutServlet.class
+com\project\servlet\SignupServlet.class
+com\project\servlet\EmailServlet.class
+com\project\servlet\Announcement.class
+com\project\servlet\GetApplicantsServlet.class
+com\project\db\DatabaseConnection.class
+com\project\servlet\AnnouncementServlet.class
+com\project\servlet\GetPostIdByEmailServlet.class
+com\project\servlet\ViewAnnouncementsIn.class
+com\project\filter\AuthFilter.class

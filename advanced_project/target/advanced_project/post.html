@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Post Jobs</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/postAnnouncement.css">
+</head>
+<body>
+    <header>
+        <h1>Jobs</h1>
+        <nav>
+            <ul>
+                <li><a href="jobApplicantsDashboard.html">Dashboard</a></li>
+                <!-- <li><a href="postannouncement.html">Post Announcement</a></li> -->
+                <li><a href="#">Profile</a></li>
+                <li><a href="/advanced_project/logout">Logout</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section class="announcement-list">
+            <h2>Recent Job Posts</h2>
+            <div id="announcements"></div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 FreelanceHub. All Rights Reserved.</p>
+    </footer>
+
+    <!-- Application Modal -->
+    <div class="modal fade" id="applyModal" tabindex="-1" aria-labelledby="applyModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="applyModalLabel">Apply for Post</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="applyForm" enctype="multipart/form-data">
+                        <div class="mb-3">
+                            <label for="fullName" class="form-label">Full Name</label>
+                            <input type="text" class="form-control" id="fullName" name="fullName" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email Address</label>
+                            <input type="email" class="form-control" id="email" name="email" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="github" class="form-label">Github Link</label>
+                            <input type="url" class="form-control" id="github" name="github">
+                        </div>
+                        <div class="mb-3">
+                            <label for="linkedin" class="form-label">LinkedIn Link</label>
+                            <input type="url" class="form-control" id="linkedin" name="linkedin">
+                        </div>
+                        <div class="mb-3">
+                            <label for="resume" class="form-label">Resume</label>
+                            <input type="file" class="form-control" id="resume" name="resume" required>
+                        </div>
+                        <input type="hidden" id="postId" name="postId">
+                        <button type="submit" class="btn btn-primary">Submit Application</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // Fetch announcements and populate the DOM
+            fetch('/advanced_project/getAnnouncements')
+                .then(response => response.json())
+                .then(data => {
+                    const announcementsDiv = document.getElementById('announcements');
+                    data.forEach(announcement => {
+                        const announcementDiv = document.createElement('div');
+                        announcementDiv.innerHTML = `
+                            <h3>${announcement.title}</h3>
+                            <p>${announcement.content}</p>
+                            <p>Posted on: ${announcement.date}</p>
+                            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#applyModal" data-post-id="${announcement.id}">
+                                Apply
+                            </button>
+                        `;
+                        announcementsDiv.appendChild(announcementDiv);
+                    });
+                })
+                .catch(error => console.error('Error fetching announcements:', error));
+        });
+
+        // Set postId dynamically when opening the modal
+        document.getElementById('applyModal').addEventListener('show.bs.modal', function (event) {
+            const button = event.relatedTarget;
+            const postId = button.getAttribute('data-post-id');
+            console.log('Post ID:', postId); // Debugging
+            document.getElementById('postId').value = postId;
+        });
+
+        // Handle form submission using FormData
+        document.getElementById('applyForm').addEventListener('submit', function (event) {
+            event.preventDefault();
+
+            const form = document.getElementById('applyForm');
+            const formData = new FormData(form); // Automatically gathers all form data, including files
+
+            fetch('/advanced_project/apply', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.text())
+            .then(data => {
+                console.log('Server Response:', data);
+                if (data.includes('success')) {
+                    alert('Application submitted successfully.');
+                    document.getElementById('applyForm').reset();
+                    const applyModal = bootstrap.Modal.getInstance(document.getElementById('applyModal'));
+                    applyModal.hide();
+                } else {
+                    alert('Failed to submit application. Please check your details.');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Internal server error. Please try again.');
+            });
+        });
+    </script>
+</body>
+</html>
